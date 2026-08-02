@@ -1,6 +1,6 @@
 ---
 title: Desk Lamp
-subtitle: Placeholder project
+subtitle: Placeholder project 1
 image: /uploads/work-amber.svg
 order: 1
 ---
