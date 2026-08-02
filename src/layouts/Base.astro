@@ -1,0 +1,100 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Personal site of Berkay Ahi — thoughts, work, CV." } = Astro.props;
+const path = Astro.url.pathname;
+const nav = [
+  { href: "/thoughts", label: "Thoughts" },
+  { href: "/cv", label: "CV" },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <a class="wordmark" href="/">Berkay Ahi</a>
+      <nav>
+        {nav.map(({ href, label }) => (
+          <a href={href} aria-current={path.startsWith(href) ? "page" : undefined}>{label}</a>
+        ))}
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <span>© {new Date().getFullYear()} Berkay Ahi</span>
+      <span>Built in the open — <a href="https://github.com/berkayahi/bahi">source</a></span>
+    </footer>
+  </body>
+</html>
+
+<style>
+  header {
+    width: min(var(--measure), 100% - 3rem);
+    margin-inline: auto;
+    padding-block: 1.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .wordmark {
+    font-family: var(--serif-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    text-decoration: none;
+  }
+
+  nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  nav a {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--faded);
+  }
+
+  nav a:hover,
+  nav a[aria-current="page"] {
+    color: var(--rust);
+  }
+
+  footer {
+    width: min(var(--measure), 100% - 3rem);
+    margin-inline: auto;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--faded);
+  }
+</style>

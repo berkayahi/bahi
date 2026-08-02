@@ -1,0 +1,23 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../layouts/Base.astro";
+
+const cv = await getEntry("pages", "cv");
+if (!cv) throw new Error("Missing src/content/pages/cv.md");
+const { Content } = await render(cv);
+---
+
+<Base title="CV — Berkay Ahi" description="CV of Berkay Ahi, software engineer.">
+  <p class="label reveal">Curriculum vitae</p>
+  <h1 class="reveal">Berkay Ahi</h1>
+  <div class="prose reveal">
+    <Content />
+  </div>
+</Base>
+
+<style>
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    margin-block: 0.5rem 2rem;
+  }
+</style>

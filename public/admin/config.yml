@@ -1,0 +1,40 @@
+# Sveltia CMS — https://github.com/sveltia/sveltia-cms
+# Auth: deploy https://github.com/sveltia/sveltia-cms-auth to a Cloudflare
+# Worker and set base_url below. The OAuth secret lives in the Worker's
+# environment, never in this repo. See README.
+
+backend:
+  name: github
+  repo: berkayahi/bahi # <- your GitHub username/repo
+  branch: main
+  base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev # <- your auth Worker URL
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: thoughts
+    label: Thoughts
+    label_singular: Thought
+    folder: src/content/thoughts
+    create: true
+    extension: md
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date, widget: datetime, format: "YYYY-MM-DD", time_format: false }
+      - { name: description, label: Description, widget: string, required: false }
+      # note: drafts are committed to the public repo — they are hidden from
+      # the site but visible to anyone reading the repository.
+      - { name: draft, label: Draft, widget: boolean, default: false }
+      - { name: body, label: Body, widget: markdown }
+
+  - name: pages
+    label: Pages
+    files:
+      - name: cv
+        label: CV
+        file: src/content/pages/cv.md
+        fields:
+          - { name: title, label: Title, widget: string }
+          - { name: body, label: Body, widget: markdown }
