@@ -7,7 +7,7 @@ backend:
   name: github
   repo: berkayahi/bahi # <- your GitHub username/repo
   branch: main
-  base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev # <- your auth Worker URL
+  base_url: https://sveltia-cms-auth.brkyahi.workers.dev # <- your auth Worker URL
 
 media_folder: public/uploads
 public_folder: /uploads
