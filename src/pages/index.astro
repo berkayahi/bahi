@@ -1,6 +1,10 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 import Base from "../layouts/Base.astro";
+
+const home = await getEntry("pages", "home");
+if (!home) throw new Error("Missing src/content/pages/home.md");
+const { Content: Intro } = await render(home);
 
 const posts = (await getCollection("thoughts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -15,12 +19,10 @@ const fmt = new Intl.DateTimeFormat("en", { day: "2-digit", month: "short", year
 
 <Base title="Berkay Ahi">
   <section class="hero reveal">
-    <h1>Hi, I'm Berkay</h1>
-    <p class="intro">
-      I'm a software engineer. I write about the things I build, the problems that
-      resist me, and the tools I end up keeping. Everything here lives in an
-      open <a href="https://github.com/berkayahi/bahi">repository</a>.
-    </p>
+    <h1>{home.data.title}</h1>
+    <div class="intro">
+      <Intro />
+    </div>
   </section>
 
   <section class="reveal">
@@ -67,6 +69,10 @@ const fmt = new Intl.DateTimeFormat("en", { day: "2-digit", month: "short", year
   .intro {
     max-width: 36rem;
     color: var(--muted);
+  }
+
+  .intro :global(p) {
+    margin-block: 0.5em;
   }
 
   section + section {
