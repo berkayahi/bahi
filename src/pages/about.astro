@@ -1,0 +1,23 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../layouts/Base.astro";
+
+const about = await getEntry("pages", "about");
+if (!about) throw new Error("Missing src/content/pages/about.md");
+const { Content } = await render(about);
+---
+
+<Base title="About — Berkay Ahi" description="About Berkay Ahi.">
+  <p class="label reveal">About</p>
+  <h1 class="reveal">Hi, I'm Berkay</h1>
+  <div class="prose reveal">
+    <Content />
+  </div>
+</Base>
+
+<style>
+  h1 {
+    font-size: 1.9rem;
+    margin-block: 0.4rem 1rem;
+  }
+</style>

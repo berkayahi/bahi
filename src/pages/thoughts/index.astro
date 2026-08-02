@@ -6,20 +6,18 @@ const posts = (await getCollection("thoughts", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
-const fmt = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" });
+const fmt = new Intl.DateTimeFormat("en", { day: "2-digit", month: "short", year: "2-digit" });
 ---
 
 <Base title="Thoughts — Berkay Ahi" description="Essays and notes by Berkay Ahi.">
   <p class="label reveal">Thoughts</p>
   <h1 class="reveal">Essays &amp; notes</h1>
-  <ul class="posts reveal">
+  <ul class="post-list reveal">
     {posts.map((post) => (
       <li>
+        <a href={`/thoughts/${post.id}`}>{post.data.title}</a>
+        <span class="leader"></span>
         <time datetime={post.data.date.toISOString()}>{fmt.format(post.data.date)}</time>
-        <div>
-          <a href={`/thoughts/${post.id}`}>{post.data.title}</a>
-          {post.data.description && <p>{post.data.description}</p>}
-        </div>
       </li>
     ))}
   </ul>
@@ -27,51 +25,7 @@ const fmt = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year
 
 <style>
   h1 {
-    font-size: clamp(2rem, 5vw, 2.8rem);
-    margin-block: 0.5rem 2.5rem;
-  }
-
-  .posts {
-    list-style: none;
-    padding: 0;
-  }
-
-  .posts li {
-    display: grid;
-    grid-template-columns: 7.5rem 1fr;
-    gap: 1rem;
-    padding-block: 1.4rem;
-    border-top: 1px solid var(--hairline);
-  }
-
-  .posts time {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--faded);
-    padding-top: 0.4rem;
-  }
-
-  .posts a {
-    font-family: var(--serif-display);
-    font-weight: 600;
-    font-size: 1.3rem;
-    text-decoration: none;
-  }
-
-  .posts a:hover {
-    color: var(--rust);
-  }
-
-  .posts p {
-    margin-top: 0.35rem;
-    color: var(--faded);
-    font-size: 1rem;
-  }
-
-  @media (max-width: 40rem) {
-    .posts li {
-      grid-template-columns: 1fr;
-      gap: 0.25rem;
-    }
+    font-size: 1.9rem;
+    margin-block: 0.4rem 1rem;
   }
 </style>

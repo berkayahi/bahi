@@ -1,0 +1,51 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects", ({ data }) => !data.draft);
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<Base title={`${project.data.title} — Berkay Ahi`} description={project.data.subtitle}>
+  <article>
+    <header class="reveal">
+      {project.data.subtitle && <p class="label">{project.data.subtitle}</p>}
+      <h1>{project.data.title}</h1>
+    </header>
+    <img class="cover reveal" src={project.data.image} alt={project.data.title} />
+    <div class="prose reveal">
+      <Content />
+    </div>
+    <hr />
+    <p class="back"><a href="/projects">← All projects</a></p>
+  </article>
+</Base>
+
+<style>
+  h1 {
+    font-size: 1.9rem;
+    margin-block: 0.4rem 1.5rem;
+  }
+
+  .cover {
+    width: 100%;
+    max-height: 26rem;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 1.5rem;
+  }
+
+  .back {
+    font-size: 0.9rem;
+  }
+
+  .back a {
+    text-decoration: none;
+    color: var(--muted);
+  }
+</style>

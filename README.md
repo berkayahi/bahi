@@ -1,6 +1,6 @@
 # bahi
 
-Personal website of Berkay Ahi — essays, notes, and a CV. Built in the open: the entire site, content included, lives in this public repository.
+Personal website of Berkay Ahi — essays, notes, and projects. Built in the open: the entire site, content included, lives in this public repository.
 
 ![Home page](docs/home.png)
 
@@ -26,13 +26,17 @@ Writing happens at `/admin` — a full editor UI that commits markdown to this r
 
 ## Screenshots
 
+Dark by default, with a light mode toggle.
+
 | Thoughts | Post |
 |---|---|
 | ![Thoughts list](docs/thoughts.png) | ![A post](docs/post.png) |
 
-| CV | Dark mode |
+| Projects | About |
 |---|---|
-| ![CV](docs/cv.png) | ![Dark mode](docs/home-dark.png) |
+| ![Projects](docs/projects.png) | ![About](docs/about.png) |
+
+![Light mode](docs/home-light.png)
 
 ## Development
 
@@ -45,7 +49,9 @@ npm run build    # static output in dist/
 Content lives in `src/content/`:
 
 - `thoughts/*.md` — blog posts (`draft: true` hides a post from the built site, but note: the file is still visible in this public repo)
-- `pages/cv.md` — the CV page
+- `projects/*.md` — projects with cover images (shown as cards on the home page and `/projects`)
+- `pages/about.md` — the About page
+- `pages/cv.md` — CV content, currently unpublished (no route renders it)
 
 ## Deploying
 

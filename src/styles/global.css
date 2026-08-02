@@ -1,29 +1,26 @@
-/* Warm editorial: cream paper, ink, rust accent. */
+/* Calm & warm: charcoal dark / soft light, single orange accent, one typeface. */
 
+/* Dark is the default; light is opt-in via the header toggle. */
 :root {
-  --paper: #f7f2e9;
-  --paper-raised: #fdfaf4;
-  --ink: #211d16;
-  --faded: #6f6759;
-  --rust: #bc4b1f;
-  --hairline: #ddd4c4;
+  --bg: #1a1c20;
+  --bg-raised: #232529;
+  --ink: #e8e9ea;
+  --muted: #94989e;
+  --accent: #ff5c33;
+  --hairline: #2e3035;
+  --card-overlay: rgba(20, 20, 24, 0.55);
 
-  --serif-display: "Fraunces", Georgia, serif;
-  --serif-body: "Newsreader", Georgia, serif;
-  --mono: "JetBrains Mono", ui-monospace, monospace;
-
+  --sans: "Plus Jakarta Sans", system-ui, sans-serif;
   --measure: 42rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #191510;
-    --paper-raised: #211c15;
-    --ink: #ece4d4;
-    --faded: #9c9282;
-    --rust: #e0713d;
-    --hairline: #38311f;
-  }
+:root[data-theme="light"] {
+  --bg: #fafaf9;
+  --bg-raised: #f0efed;
+  --ink: #1e2024;
+  --muted: #6b6f76;
+  --accent: #e0501a;
+  --hairline: #e2e1de;
 }
 
 * {
@@ -32,24 +29,20 @@
 }
 
 html {
-  color-scheme: light dark;
+  color-scheme: dark;
   scroll-behavior: smooth;
 }
 
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
 body {
-  background: var(--paper);
-  /* faint paper grain */
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgb(from var(--ink) r g b / 0.012) 2px,
-    rgb(from var(--ink) r g b / 0.012) 3px
-  );
+  background: var(--bg);
   color: var(--ink);
-  font-family: var(--serif-body);
-  font-size: 1.1875rem;
-  line-height: 1.65;
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.75;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -59,41 +52,39 @@ main {
   width: min(var(--measure), 100% - 3rem);
   margin-inline: auto;
   flex: 1;
-  padding-block: 3rem 5rem;
+  padding-block: 2.5rem 5rem;
 }
 
 h1, h2, h3 {
-  font-family: var(--serif-display);
   font-weight: 600;
-  line-height: 1.15;
+  line-height: 1.25;
   letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
 a {
   color: inherit;
-  text-decoration-color: var(--rust);
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
   transition: color 120ms ease;
 }
 
 a:hover {
-  color: var(--rust);
+  color: var(--accent);
 }
 
 ::selection {
-  background: var(--rust);
-  color: var(--paper);
+  background: var(--accent);
+  color: #fff;
 }
 
 .label {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--faded);
+  color: var(--muted);
 }
 
 hr {
@@ -102,14 +93,107 @@ hr {
   margin-block: 2.5rem;
 }
 
+/* Post list with dotted leaders (title ······ date) */
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin-block: 1.25rem;
+}
+
+.post-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75em;
+  padding-block: 0.55rem;
+}
+
+.post-list a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.post-list .leader {
+  flex: 1;
+  border-bottom: 1px dotted color-mix(in srgb, var(--muted) 45%, transparent);
+  transform: translateY(-0.25em);
+}
+
+.post-list time {
+  font-size: 0.85rem;
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Works cards */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-block: 1.25rem;
+}
+
+@media (max-width: 48rem) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 32rem) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  background: var(--bg-raised);
+}
+
+.project-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.project-card:hover img {
+  transform: scale(1.04);
+}
+
+.project-card .caption {
+  position: absolute;
+  inset: 0;
+  padding: 1.1rem 1.2rem;
+  background: linear-gradient(180deg, var(--card-overlay), transparent 55%);
+  color: #fff;
+}
+
+.project-card .caption p {
+  font-size: 0.78rem;
+  opacity: 0.85;
+}
+
+.project-card .caption h3 {
+  color: #fff;
+  font-size: 1.05rem;
+}
+
 /* Long-form article body */
 .prose h2 {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   margin: 2.2em 0 0.6em;
 }
 
 .prose h3 {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   margin: 1.8em 0 0.5em;
 }
 
@@ -122,25 +206,23 @@ hr {
 }
 
 .prose blockquote {
-  border-left: 2px solid var(--rust);
+  border-left: 3px solid var(--accent);
   padding-left: 1.25rem;
-  font-style: italic;
-  color: var(--faded);
+  color: var(--muted);
 }
 
 .prose code {
-  font-family: var(--mono);
-  font-size: 0.82em;
-  background: var(--paper-raised);
-  border: 1px solid var(--hairline);
+  font-family: ui-monospace, monospace;
+  font-size: 0.85em;
+  background: var(--bg-raised);
   border-radius: 4px;
-  padding: 0.1em 0.35em;
+  padding: 0.15em 0.4em;
 }
 
 .prose pre {
-  background: var(--paper-raised);
+  background: var(--bg-raised);
   border: 1px solid var(--hairline);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 1.1rem 1.25rem;
   overflow-x: auto;
   font-size: 0.85rem;
@@ -149,29 +231,29 @@ hr {
 
 .prose pre code {
   background: none;
-  border: 0;
   padding: 0;
   font-size: inherit;
 }
 
 .prose img {
   max-width: 100%;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 /* staggered page-load reveal */
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
-    animation: rise 0.6s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+    animation: rise 0.5s cubic-bezier(0.2, 0.6, 0.2, 1) both;
   }
-  .reveal:nth-child(2) { animation-delay: 80ms; }
-  .reveal:nth-child(3) { animation-delay: 160ms; }
-  .reveal:nth-child(4) { animation-delay: 240ms; }
+  .reveal:nth-child(2) { animation-delay: 70ms; }
+  .reveal:nth-child(3) { animation-delay: 140ms; }
+  .reveal:nth-child(4) { animation-delay: 210ms; }
+  .reveal:nth-child(5) { animation-delay: 280ms; }
 
   @keyframes rise {
     from {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(10px);
     }
   }
 }

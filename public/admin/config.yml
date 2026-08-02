@@ -29,9 +29,31 @@ collections:
       - { name: draft, label: Draft, widget: boolean, default: false }
       - { name: body, label: Body, widget: markdown }
 
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: src/content/projects
+    create: true
+    extension: md
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: subtitle, label: Subtitle, widget: string, required: false, hint: "e.g. 'For Vitsoe 606'" }
+      - { name: image, label: Cover image, widget: image }
+      - { name: order, label: Order, widget: number, default: 0, hint: "Lower shows first" }
+      - { name: draft, label: Draft, widget: boolean, default: false }
+      - { name: body, label: Body, widget: markdown, required: false }
+
   - name: pages
     label: Pages
     files:
+      - name: about
+        label: About
+        file: src/content/pages/about.md
+        fields:
+          - { name: title, label: Title, widget: string }
+          - { name: body, label: Body, widget: markdown }
+      # CV page is unpublished for now; content kept for later.
       - name: cv
         label: CV
         file: src/content/pages/cv.md

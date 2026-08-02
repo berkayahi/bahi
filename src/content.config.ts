@@ -11,6 +11,17 @@ const thoughts = defineCollection({
   }),
 });
 
+const projects = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
+  schema: z.object({
+    title: z.string(),
+    subtitle: z.string().optional(),
+    image: z.string(),
+    order: z.number().default(0),
+    draft: z.boolean().default(false),
+  }),
+});
+
 const pages = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/pages" }),
   schema: z.object({
@@ -18,4 +29,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { thoughts, pages };
+export const collections = { thoughts, projects, pages };

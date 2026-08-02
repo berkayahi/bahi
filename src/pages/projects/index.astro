@@ -1,0 +1,31 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+
+const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Base title="Projects — Berkay Ahi" description="Projects and things built by Berkay Ahi.">
+  <p class="label reveal">Projects</p>
+  <h1 class="reveal">Things I've made</h1>
+  <div class="projects-grid reveal">
+    {projects.map((project) => (
+      <a class="project-card" href={`/projects/${project.id}`}>
+        <img src={project.data.image} alt={project.data.title} loading="lazy" />
+        <span class="caption">
+          {project.data.subtitle && <p>{project.data.subtitle}</p>}
+          <h3>{project.data.title}</h3>
+        </span>
+      </a>
+    ))}
+  </div>
+</Base>
+
+<style>
+  h1 {
+    font-size: 1.9rem;
+    margin-block: 0.4rem 1.5rem;
+  }
+</style>
