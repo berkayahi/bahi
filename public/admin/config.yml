@@ -13,6 +13,29 @@ media_folder: public/uploads
 public_folder: /uploads
 
 collections:
+  - name: settings
+    label: Site settings
+    files:
+      - name: site
+        label: Site
+        file: src/content/settings/site.yaml
+        fields:
+          - { name: name, label: Your name, widget: string }
+          - { name: description, label: Site description (meta/SEO), widget: string }
+          - { name: repo, label: Repository URL, widget: string }
+          - { name: github, label: GitHub profile URL, widget: string }
+          - { name: linkedin, label: LinkedIn URL, widget: string }
+          - name: nav
+            label: Navigation
+            widget: list
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: href, label: Path, widget: string }
+          - { name: thoughts_label, label: Thoughts section label, widget: string }
+          - { name: thoughts_heading, label: Thoughts page heading, widget: string }
+          - { name: projects_label, label: Projects section label, widget: string }
+          - { name: projects_heading, label: Projects page heading, widget: string }
+
   - name: thoughts
     label: Thoughts
     label_singular: Thought

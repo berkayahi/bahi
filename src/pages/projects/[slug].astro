@@ -11,7 +11,7 @@ const { project } = Astro.props;
 const { Content } = await render(project);
 ---
 
-<Base title={`${project.data.title} — Berkay Ahi`} description={project.data.subtitle}>
+<Base title={project.data.title} description={project.data.subtitle}>
   <article>
     <header class="reveal">
       {project.data.subtitle && <p class="label">{project.data.subtitle}</p>}

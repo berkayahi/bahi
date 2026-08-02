@@ -29,4 +29,20 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { thoughts, projects, pages };
+const settings = defineCollection({
+  loader: glob({ pattern: "*.yaml", base: "./src/content/settings" }),
+  schema: z.object({
+    name: z.string(),
+    description: z.string(),
+    repo: z.string().url(),
+    github: z.string().url(),
+    linkedin: z.string().url(),
+    nav: z.array(z.object({ label: z.string(), href: z.string() })),
+    thoughts_label: z.string(),
+    thoughts_heading: z.string(),
+    projects_label: z.string(),
+    projects_heading: z.string(),
+  }),
+});
+
+export const collections = { thoughts, projects, pages, settings };

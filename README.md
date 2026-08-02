@@ -4,14 +4,11 @@ Personal website of Berkay Ahi — essays, notes, and projects. Built in the ope
 
 ![Home page](docs/home.png)
 
-## Ideology
+## How it works
 
-A personal site should be **honest software**:
-
-- **No hidden machinery.** Every post is a markdown file you can read right here. The Git history is the archive.
-- **No servers.** The site compiles to static HTML and is served from Cloudflare Pages. Nothing to patch, nothing to back up.
-- **No secrets in the repo.** The only credential (a GitHub OAuth secret for the admin panel) lives in a Cloudflare Worker's environment, never in this codebase.
-- **Boring by design.** Standard tools, minimal dependencies, content outlives the stack.
+- All content (posts, projects, pages, even site settings) is markdown/YAML in `src/content/`. Astro compiles it to plain HTML at build time. No database, no server code.
+- Editing happens at `/admin` (Sveltia CMS). Saving in the admin = a Git commit to this repo = an automatic redeploy. Editing the files directly and pushing works exactly the same.
+- The repo contains zero secrets. The one credential that exists (a GitHub OAuth secret for the admin login) is stored as an environment variable on a Cloudflare Worker.
 
 ## Stack
 
@@ -53,20 +50,31 @@ Content lives in `src/content/`:
 - `pages/about.md` — the About page
 - `pages/cv.md` — CV content, currently unpublished (no route renders it)
 
-## Deploying
+## Deploying (Cloudflare)
+
+**Goal: every `git push` to `main` rebuilds and publishes the site automatically.**
 
 1. Push this repo to GitHub.
-2. In Cloudflare Pages: **Create project → connect the repo**. Build command `npm run build`, output directory `dist`. Done — every push to `main` deploys.
+2. In the [Cloudflare dashboard](https://dash.cloudflare.com): **Workers & Pages → Create → connect your GitHub repo**.
+3. When asked how to build it, enter:
+   - Build command: `npm run build`
+   - Output / assets directory: `dist`
+4. Deploy. Cloudflare gives you a `*.workers.dev` (or `*.pages.dev`) URL. From now on, pushing to `main` — whether from your terminal or from the admin panel — publishes automatically in ~1 minute.
 
-### Admin panel auth (one-time setup)
+## Enabling the admin panel (one-time)
 
-Sveltia CMS needs a tiny OAuth bridge so it can commit on your behalf:
+The admin at `/admin` needs a way to log you in with GitHub and commit on your behalf. That's a tiny separate Worker acting as an OAuth bridge. Set it up once:
 
-1. Deploy [sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth) to a Cloudflare Worker (one click from their README).
-2. Create a GitHub OAuth App (callback: `https://<your-worker>.workers.dev/callback`) and put its client ID/secret in the **Worker's** environment variables.
-3. Set `base_url` and `repo` in [public/admin/config.yml](public/admin/config.yml).
+1. **Deploy the bridge.** Go to [sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth) and click its "Deploy to Cloudflare Workers" button. Note the Worker URL it gets, e.g. `https://sveltia-cms-auth.YOURNAME.workers.dev`. In the Worker's settings, make sure the `workers.dev` route is **enabled** so the URL actually responds.
+2. **Create a GitHub OAuth App** at [github.com/settings/developers](https://github.com/settings/developers) → New OAuth App:
+   - Homepage URL: your site URL
+   - Authorization callback URL: the Worker URL from step 1 + `/callback`
 
-Then open `yoursite.com/admin` and sign in with GitHub.
+   Copy the Client ID and generate a Client Secret.
+3. **Give the Worker the credentials.** In the Worker's **Settings → Variables and Secrets**, add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` (as a secret). Optionally add `ALLOWED_DOMAINS` with your site's domain(s), comma-separated, wildcards allowed — this stops strangers from using your bridge.
+4. **Point the site at the bridge.** In [public/admin/config.yml](public/admin/config.yml), set `base_url` to the Worker URL and `repo` to your `username/repo`. Commit and push.
+
+Open `yoursite.com/admin`, sign in with GitHub once, and you can edit everything: posts, projects, the About page, the home intro, and site settings (name, nav, social links).
 
 ## License
 

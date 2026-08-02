@@ -7,9 +7,8 @@ if (!about) throw new Error("Missing src/content/pages/about.md");
 const { Content } = await render(about);
 ---
 
-<Base title="About — Berkay Ahi" description="About Berkay Ahi.">
-  <p class="label reveal">About</p>
-  <h1 class="reveal">Hi, I'm Berkay</h1>
+<Base title={about.data.title}>
+  <h1 class="reveal">{about.data.title}</h1>
   <div class="prose reveal">
     <Content />
   </div>

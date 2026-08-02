@@ -6,6 +6,9 @@ const home = await getEntry("pages", "home");
 if (!home) throw new Error("Missing src/content/pages/home.md");
 const { Content: Intro } = await render(home);
 
+const site = await getEntry("settings", "site");
+if (!site) throw new Error("Missing src/content/settings/site.yaml");
+
 const posts = (await getCollection("thoughts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 5);
@@ -17,7 +20,7 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
 const fmt = new Intl.DateTimeFormat("en", { day: "2-digit", month: "short", year: "2-digit" });
 ---
 
-<Base title="Berkay Ahi">
+<Base>
   <section class="hero reveal">
     <h1>{home.data.title}</h1>
     <div class="intro">
@@ -26,7 +29,7 @@ const fmt = new Intl.DateTimeFormat("en", { day: "2-digit", month: "short", year
   </section>
 
   <section class="reveal">
-    <p class="label">Thoughts</p>
+    <p class="label">{site.data.thoughts_label}</p>
     <ul class="post-list">
       {posts.map((post) => (
         <li>
@@ -40,7 +43,7 @@ const fmt = new Intl.DateTimeFormat("en", { day: "2-digit", month: "short", year
   </section>
 
   <section class="reveal">
-    <p class="label">Projects</p>
+    <p class="label">{site.data.projects_label}</p>
     <div class="projects-grid">
       {projects.map((project) => (
         <a class="project-card" href={`/projects/${project.id}`}>
